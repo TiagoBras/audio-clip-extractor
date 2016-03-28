@@ -1,1 +1,11 @@
 .DS_Store
+.cache/
+.eggs/
+
+audioextractor/audio/
+__pycache__/
+
+# This might have to be remove from this ignore list more down the line
+dist/
+
+AudioClipExtractor.egg-info/
