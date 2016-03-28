@@ -1,7 +1,17 @@
 from audioextractor.labels_parser import UdacityLabelsParser, AudioClip
+import pytest
+
+class TestFoo:
+    @pytest.fixture()
+    def hello(self):
+        return "Hello world!"
+
+    def test_add(self, hello):
+        print(hello)
+        assert 0 == 0
 
 class TestUdacityLabelsParser:
-    def setup(self):
+    def setup_class(self):
         self.LABELS_SAMPLE = """
         5.749493	5.749493	1a f c
         6.328176	6.328176	1a

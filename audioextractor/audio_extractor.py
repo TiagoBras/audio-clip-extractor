@@ -26,7 +26,7 @@ class AudioExtractor(object):
 
         for i, clip in enumerate(clips):
             command = [self.ffmpegPath,
-                '-f', 'm4a', '-i', 'pipe:0',
+                '-i', 'pipe:0',
                 '-ss', '%.3f' % clip.start,
                 '-t', '%.3f' % clip.duration(),
                 '-c', 'copy',
