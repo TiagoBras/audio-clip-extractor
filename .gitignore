@@ -3,6 +3,8 @@
 .eggs/
 
 audioextractor/audio/
+audioextractor/labels/
+
 __pycache__/
 
 # This might have to be remove from this ignore list more down the line
