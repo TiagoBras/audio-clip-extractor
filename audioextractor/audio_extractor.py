@@ -1,6 +1,9 @@
 from sys import platform as PLATFORM
-from os.path import isfile
+from sys import exit
+from os.path import isfile, isdir, join, abspath
 from subprocess import Popen, PIPE
+
+from pkg_resources import resource_filename, Requirement
 
 from audioextractor.labels_parser import UdacityLabelsParser
 
@@ -16,7 +19,7 @@ class AudioExtractor(object):
         self.audioData = audioFilePathOrData if self.audioFilePath == None else None
         self.ffmpegPath = ffmpegPath if ffmpegPath != None else self._ffmpegPath()
 
-    def extractClips(self, labelsFileOrString, labelsFormat=LabelsFormat.UDACITY):
+    def extractClips(self, labelsFileOrString, outputDir=None, labelsFormat=LabelsFormat.UDACITY):
         parser = None
 
         if labelsFormat == LabelsFormat.UDACITY:
@@ -26,6 +29,7 @@ class AudioExtractor(object):
 
         for i, clip in enumerate(clips):
             command = [self.ffmpegPath,
+                '-nostats', '-loglevel', '0',
                 '-i', 'pipe:0',
                 '-ss', '%.3f' % clip.start,
                 '-t', '%.3f' % clip.duration(),
@@ -36,6 +40,7 @@ class AudioExtractor(object):
                 '-f', 'mp3', 'pipe:1'
             ]
 
+            # stderr=open(devnull, 'w')
             p = Popen(command, stdin=PIPE, stdout=PIPE, bufsize=10**8)
 
             # Send AUDIO DATA and get the CLIPPED DATA
@@ -43,14 +48,23 @@ class AudioExtractor(object):
 
             # 13 clips => clip01.mp3, clip12.mp3...
             filenameFormat = 'clip%%0%dd.mp3' % len(str(len(clips)))
-            with open(filenameFormat % (i+1), 'wb') as f_out:
+            filepath = filenameFormat % (i+1)
+
+            # Prepend directory to filepath if supplied
+            if isdir(outputDir):
+                filepath = join(outputDir, filepath)
+
+            with open(filepath, 'wb') as f_out:
                 f_out.write(r_stdout)
 
     def _ffmpegPath(self):
+        ffmpegDir = resource_filename(Requirement.parse("AudioClipExtractor"), "audioextractor/bin")
+        # ffmpegDir = resource_filename(__name__, 'bin')
+
         if PLATFORM == 'win32':
-            return 'ffmpeg.exe'
+            return join(ffmpegDir, 'ffmpeg.exe')
         else:
-            return 'ffmpeg'
+            return join(ffmpegDir, 'ffmpeg')
 
     def _audioData(self):
         if self.audioData == None and self.audioFilePath != None:
@@ -58,3 +72,14 @@ class AudioExtractor(object):
                 self.audioData = f.read()
 
         return self.audioData
+
+def run(audioPath, labelsPath, outputDir=None):
+    print("Hello World! No!")
+    try:
+        extr = AudioExtractor(audioPath)
+        extr.extractClips(labelsPath, outputDir)
+    except Exception as e:
+        print(e)
+        exit(1)
+
+    exit(0)

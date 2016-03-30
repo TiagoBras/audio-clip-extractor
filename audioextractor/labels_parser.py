@@ -44,6 +44,7 @@ class UdacityLabelsParser(object):
         else:
             stringToParse = self.inputValue
 
+        # Audacity uses \r for newlines
         lines = [x.strip() for x in re.split(r'[\r\n]+', stringToParse)]
 
         clips = []
