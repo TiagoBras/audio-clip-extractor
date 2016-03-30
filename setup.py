@@ -5,7 +5,7 @@ except ImportError:
 
 setup(
     name='AudioClipExtractor',
-    version='0.1.3',
+    version='0.1.4',
     description='Easily extract multiple clips from audio files',
     long_description=open('README.rst').read(),
     author='Tiago Bras',
@@ -21,7 +21,11 @@ setup(
         'Click',
     ],
     # data_files=[('my_data', ['ffmpeg/ffmpeg', 'ffmpeg/ffmpeg.exe'])],
-    scripts = ["runner"],
+    # scripts = ["runner"],
+    entry_points='''
+        [console_scripts]
+        audiocutter=audioextrator.scripts.main:cli
+    ''',
     setup_requires=['pytest-runner'],
     tests_require=['pytest'],
 )

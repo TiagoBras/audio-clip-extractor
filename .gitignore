@@ -2,12 +2,12 @@
 .cache/
 .eggs/
 
-audioextractor/audio/
-audioextractor/labels/
+TEMPORARY_DATA_FILES/
 
 __pycache__/
 
 # This might have to be remove from this ignore list more down the line
 dist/
+build/
 
 AudioClipExtractor.egg-info/
