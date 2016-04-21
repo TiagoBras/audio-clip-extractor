@@ -1,0 +1,35 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE project PUBLIC "-//audacityproject-1.3.0//DTD//EN" "http://audacity.sourceforge.net/xml/audacityproject-1.3.0.dtd" >
+<project xmlns="http://audacity.sourceforge.net/xml/" projname="synthesized_speech_data" version="1.3.0" audacityversion="2.1.2" sel0="12.2774126649" sel1="12.2774126649" vpos="0" h="10.8055883096" zoom="300.3075729908" rate="22050.0" snapto="off" selectionformat="hh:mm:ss + milliseconds" frequencyformat="Hz" bandwidthformat="octaves">
+	<tags>
+		<tag name="GENRE" value="Speech"/>
+		<tag name="ARTIST" value="TextAloud: IVONA Brian22 (UK English)"/>
+		<tag name="Language(s)" value="UK English"/>
+		<tag name="TITLE" value="12254805.mp3"/>
+		<tag name="YEAR" value="2016"/>
+		<tag name="Encoded by" value="Lame MP3"/>
+		<tag name="ALBUM" value="Created: 4/21/2016 10:36:07 AM"/>
+		<tag name="COMMENTS" value="http://www.nextup.com"/>
+	</tags>
+	<wavetrack name="data" channel="2" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="1" rate="22050" gain="1.0" pan="0.0">
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="354240">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000393.au" len="262144" min="-0.538829" max="0.712296" rms="0.101819"/>
+				</waveblock>
+				<waveblock start="262144">
+					<simpleblockfile filename="e0000f4e.au" len="92096" min="-0.548645" max="0.676889" rms="0.082429"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<labeltrack name="Label Track" numlabels="6" height="73" minimized="0" isSelected="0">
+		<label t="0.3037445039" t1="0.8617867320" title="Hello"/>
+		<label t="1.5705239077" t1="2.6183247157" title="My name is Harry,"/>
+		<label t="2.8184664431" t1="4.2924514000" title="and I&apos;m a software engineer."/>
+		<label t="4.7318154046" t1="9.7300243577" title="I&apos;ve been working on a big project for the last 5 years which I&apos;ll soon reveal to the world."/>
+		<label t="10.3527192772" t1="11.8511829873" title="People will be amazed by it."/>
+		<label t="12.2774126649" t1="16.0102522628" title="I&apos;d even dare to say that cats and dogs are going to love it as much."/>
+	</labeltrack>
+</project>
