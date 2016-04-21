@@ -1,0 +1,6 @@
+0.303745	0.861787	Hello
+1.570524	2.618325	My name is Harry,
+2.818466	4.292451	and I'm a software engineer.
+4.731815	9.730024	I've been working on a big project for the last 5 years which I'll soon reveal to the world.
+10.352719	11.851183	People will be amazed by it.
+12.277413	16.010252	I'd even dare to say that cats and dogs are going to love it as much.

@@ -1,40 +1,38 @@
-from os.path import exists
+# -*- coding: utf-8 -*-
+from os.path import exists, join
 from os import unlink
 
 import pytest
 
 from audioextractor.audio_extractor import AudioExtractor
 
+TESTS_DIR = "tests/data/"
+
 class TestAudioExtractor:
-    def assert_exported_clips(self, amountOfClips, ext):
+    def assert_exported_clips(self, amountOfClips):
         for i in range(1, amountOfClips+1):
-            extratedClipFilename = 'clip%d.mp3' % i
+            extratedClipPath = join(TESTS_DIR, "clip%d.mp3" % i)
+            expectedClipPath = join(TESTS_DIR, "expected_clip%d.mp3" % i)
 
-            assert exists(extratedClipFilename)
+            assert exists(extratedClipPath)
 
+            f_extracted = open(extratedClipPath, 'rb')
+            f_expected = open(expectedClipPath, 'rb')
+
+            # Compare files
             try:
-                with open(extratedClipFilename, 'rb') as f:
-                    with open('tests/data/%s_expected_clip%d.mp3' % (ext, i), 'rb') as f_expected:
-                        assert f.read() == f_expected.read(), "It doesn't match expected data"
-            except (AssertionError, FileNotFoundError) as e:
-                # Delete remain files
-                for j in range(i, amountOfClips+1):
-                    extratedClipFilename = 'clip%d.mp3' % j
-                    unlink(extratedClipFilename)
+                assert f.read() == f_expected.read(), "'%s' It doesn't match expected data" % expectedClipPath
+            except(Exception) as e:
+                f_expected.close()
+                f_extracted.close()
 
-                assert 0, str(e)
+                unlink(extratedClipPath)
 
-            # Delete extracted clip since we don't need it anymore
-            unlink(extratedClipFilename)
+            if exists(extratedClipPath):
+                unlink(extratedClipPath)
 
     def test_audio_extract_using_filepath_m4a_input(self):
-        extractor = AudioExtractor('tests/data/input_audio_data.m4a')
-        extractor.extractClips('tests/data/labels_data.txt')
+        extractor = AudioExtractor('tests/data/synthesized_speech.mp3')
+        extractor.extractClips('tests/data/synthesized_speech.txt', TESTS_DIR)
 
-        self.assert_exported_clips(2, 'm4a')
-
-    def test_audio_extract_using_filepath_mp3_input(self):
-        extractor = AudioExtractor('tests/data/input_audio_data.mp3')
-        extractor.extractClips('tests/data/labels_data.txt')
-
-        self.assert_exported_clips(2, 'mp3')
+        self.assert_exported_clips(6)

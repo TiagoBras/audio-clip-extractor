@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from os.path import isfile
 import re
 
@@ -7,17 +8,17 @@ class InputType:
 
 class AudioClipSpec(object):
     """docstring for AudioClipSpec"""
-    def __init__(self, start, end, metadata=''):
+    def __init__(self, start, end, text=''):
         super(AudioClipSpec, self).__init__()
         self.start = float(start)
         self.end = float(end)
-        self.metadata = metadata
+        self.text = text
 
     def duration(self):
         return self.end - self.start
 
     def __repr__(self):
-        return "(%f, %f, %s)" % (self.start, self.end, self.metadata)
+        return "(%f, %f, %s)" % (self.start, self.end, self.text)
 
 class UdacityLabelsParser(object):
     """docstring for UdacityLabelsParser"""
@@ -31,9 +32,13 @@ class UdacityLabelsParser(object):
 
         self.inputValue = fileOrString
 
-        self.linePattern = re.compile(r"""
-    		(?P<timestamp>\d+[.]?\d*)\s+\d+[.]?\d*\s+
-    		(?P<metadata>.*)""", re.VERBOSE)
+        begin = r'(?P<begin>0*\d*\.?\d*)'
+        end = r'(?P<end>0*\d*\.?\d*)'
+        text = r'(?P<text>.*)'
+
+        regex = r'\s+'.join([begin, end, text])
+
+        self.linePattern = re.compile(regex)
 
     def parseClips(self):
         stringToParse = None
@@ -48,17 +53,11 @@ class UdacityLabelsParser(object):
         lines = [x.strip() for x in re.split(r'[\r\n]+', stringToParse)]
 
         clips = []
-        lineBuffer = []
         for line in lines:
-            r = self._parseLine(line)
+            spec = self._parseLine(line)
 
-            if r != None:
-                lineBuffer.append(r)
-
-                # Create a Clip every 2 valid timestamps
-                if len(lineBuffer) == 2:
-                    clips.append(AudioClipSpec(lineBuffer[0][0], lineBuffer[1][0], lineBuffer[0][1].strip()))
-                    lineBuffer[:] = []
+            if spec != None:
+                clips.append(spec)
 
         return clips
 
@@ -71,7 +70,7 @@ class UdacityLabelsParser(object):
 
         d = r.groupdict()
 
-        if len(d['timestamp']) == 0:
+        if len(d['begin']) == 0 or len(d['end']) == 0:
             return None
         else:
-            return [d['timestamp'], d['metadata']]
+            return AudioClipSpec(d['begin'], d['end'], d['text'])

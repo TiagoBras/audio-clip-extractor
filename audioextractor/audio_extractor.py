@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from sys import platform as PLATFORM
 from sys import exit
 from os.path import isfile, isdir, join, abspath
@@ -26,15 +27,14 @@ class AudioExtractor(object):
             parser = UdacityLabelsParser(labelsFileOrString)
 
         clips = parser.parseClips()
-# ffmpeg -i audio.m4a -metadata comments='Hello World!\nYAY!' -metadata title='Jame
-# s' out.m4a
+
         for i, clip in enumerate(clips):
             # 13 clips => clip01.mp3, clip12.mp3...
             filenameFormat = 'clip%%0%dd.mp3' % len(str(len(clips)))
             filepath = filenameFormat % (i+1)
 
             # Prepend directory to filepath if supplied
-            if isdir(outputDir):
+            if outputDir and isdir(outputDir):
                 filepath = join(outputDir, filepath)
 
             clipData = self._extractClipData(clip)
@@ -56,8 +56,21 @@ class AudioExtractor(object):
             '-map', '0',
             '-acodec', 'libmp3lame',
             '-ab', '128k',
-            '-f', 'mp3', 'pipe:1'
+            '-f', 'mp3'
         ]
+
+        # Add clip TEXT as metadata and set a few more to default
+        metadata = dict(m_text=audioClipSpec.text)
+            # title='Extracted clip',
+            # album='N/A',
+            # genre='Shadowing',
+            # artist='N/A')
+
+        for k, v in metadata.items():
+            command.append('-metadata')
+            command.append("{}='{}'".format(k, v))
+
+        command.append('pipe:1')
 
         # stderr=open(devnull, 'w')
         p = Popen(command, stdin=PIPE, stdout=PIPE, bufsize=10**8)
@@ -84,7 +97,6 @@ class AudioExtractor(object):
         return self.audioData
 
 def run(audioPath, labelsPath, outputDir=None):
-    print("Hello World! No!")
     try:
         extr = AudioExtractor(audioPath)
         extr.extractClips(labelsPath, outputDir)

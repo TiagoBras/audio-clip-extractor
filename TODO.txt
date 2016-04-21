@@ -1,0 +1,11 @@
+Functionality
+
+Extract one or more clips using just the command line without any labels file
+
+Extract one or more clips with a labels file (exported from audacity)
+
+Choose an output directory
+
+Have the option to output files as a zip container
+
+

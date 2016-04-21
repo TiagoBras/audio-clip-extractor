@@ -3,6 +3,7 @@
 .eggs/
 
 TEMPORARY_DATA_FILES/
+venv35/
 
 __pycache__/
 
