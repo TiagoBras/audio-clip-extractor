@@ -13,6 +13,7 @@ setup(
     download_url='http://tiagobras.com/download',
     url='http://tiagobras.com',
     packages=find_packages(exclude=[]),
+    include_package_data=True,
     # package_dir={'': 'src'},
     package_data = {
         'audioextractor': ['bin/*'],
@@ -24,7 +25,7 @@ setup(
     # scripts = ["runner"],
     entry_points='''
         [console_scripts]
-        audiocutter=audioextrator.scripts.main:cli
+        audiocutter=audioextractor.scripts.main:cli
     ''',
     setup_requires=['pytest-runner'],
     tests_require=['pytest'],

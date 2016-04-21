@@ -5,10 +5,10 @@ class InputType:
     STRING = 0
     FILE = 1
 
-class AudioClip(object):
-    """docstring for AudioClip"""
+class AudioClipSpec(object):
+    """docstring for AudioClipSpec"""
     def __init__(self, start, end, metadata=''):
-        super(AudioClip, self).__init__()
+        super(AudioClipSpec, self).__init__()
         self.start = float(start)
         self.end = float(end)
         self.metadata = metadata
@@ -57,7 +57,7 @@ class UdacityLabelsParser(object):
 
                 # Create a Clip every 2 valid timestamps
                 if len(lineBuffer) == 2:
-                    clips.append(AudioClip(lineBuffer[0][0], lineBuffer[1][0], lineBuffer[0][1]))
+                    clips.append(AudioClipSpec(lineBuffer[0][0], lineBuffer[1][0], lineBuffer[0][1].strip()))
                     lineBuffer[:] = []
 
         return clips

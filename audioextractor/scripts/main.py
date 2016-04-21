@@ -1,5 +1,5 @@
 import click
 
 @click.command()
-def hello():
+def cli():
     click.echo('Hello World!')

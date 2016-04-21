@@ -5,7 +5,7 @@ from subprocess import Popen, PIPE
 
 from pkg_resources import resource_filename, Requirement
 
-from audioextractor.labels_parser import UdacityLabelsParser
+from audioextractor.labels_parser import UdacityLabelsParser, AudioClipSpec
 
 class LabelsFormat:
     DEFAULT = 0
@@ -26,26 +26,9 @@ class AudioExtractor(object):
             parser = UdacityLabelsParser(labelsFileOrString)
 
         clips = parser.parseClips()
-
+# ffmpeg -i audio.m4a -metadata comments='Hello World!\nYAY!' -metadata title='Jame
+# s' out.m4a
         for i, clip in enumerate(clips):
-            command = [self.ffmpegPath,
-                '-nostats', '-loglevel', '0',
-                '-i', 'pipe:0',
-                '-ss', '%.3f' % clip.start,
-                '-t', '%.3f' % clip.duration(),
-                '-c', 'copy',
-                '-map', '0',
-                '-acodec', 'libmp3lame',
-                '-ab', '128k',
-                '-f', 'mp3', 'pipe:1'
-            ]
-
-            # stderr=open(devnull, 'w')
-            p = Popen(command, stdin=PIPE, stdout=PIPE, bufsize=10**8)
-
-            # Send AUDIO DATA and get the CLIPPED DATA
-            r_stdout, r_stderr = p.communicate(self._audioData())
-
             # 13 clips => clip01.mp3, clip12.mp3...
             filenameFormat = 'clip%%0%dd.mp3' % len(str(len(clips)))
             filepath = filenameFormat % (i+1)
@@ -54,8 +37,35 @@ class AudioExtractor(object):
             if isdir(outputDir):
                 filepath = join(outputDir, filepath)
 
+            clipData = self._extractClipData(clip)
+
             with open(filepath, 'wb') as f_out:
-                f_out.write(r_stdout)
+                f_out.write(clipData)
+
+    def _extractClipData(self, audioClipSpec, showLogs=False):
+        command = [self.ffmpegPath]
+
+        if not showLogs:
+            command += ['-nostats', '-loglevel', '0']
+
+        command += [
+            '-i', 'pipe:0',
+            '-ss', '%.3f' % audioClipSpec.start,
+            '-t', '%.3f' % audioClipSpec.duration(),
+            '-c', 'copy',
+            '-map', '0',
+            '-acodec', 'libmp3lame',
+            '-ab', '128k',
+            '-f', 'mp3', 'pipe:1'
+        ]
+
+        # stderr=open(devnull, 'w')
+        p = Popen(command, stdin=PIPE, stdout=PIPE, bufsize=10**8)
+
+        # Send AUDIO DATA and get the CLIPPED DATA
+        r_stdout, r_stderr = p.communicate(self._audioData())
+
+        return r_stdout
 
     def _ffmpegPath(self):
         ffmpegDir = resource_filename(Requirement.parse("AudioClipExtractor"), "audioextractor/bin")
