@@ -4,8 +4,8 @@ except ImportError:
     from distutils.core import setup, find_packages
 
 setup(
-    name='AudioClipExtractor',
-    version='0.1.4',
+    name='audioclipcutter',
+    version='0.1.7',
     description='Easily extract multiple clips from audio files',
     long_description=open('README.rst').read(),
     author='Tiago Bras',
@@ -16,16 +16,21 @@ setup(
     include_package_data=True,
     # package_dir={'': 'src'},
     package_data = {
-        'audioextractor': ['bin/*'],
+        'audioclipcutter': ['bin/*'],
     },
     install_requires=[
-        'Click',
+        # 'Click',
+        # 'python-helper-utils'
+    ],
+    dependency_links=[
+    #     "git+ssh://git@gitlab.com:TiagoBras/python-helper-utils.git"
+        "../TBUtils"
     ],
     # data_files=[('my_data', ['ffmpeg/ffmpeg', 'ffmpeg/ffmpeg.exe'])],
     # scripts = ["runner"],
     entry_points='''
         [console_scripts]
-        audiocutter=audioextractor.scripts.main:cli
+        audiocutter=audioclipcutter.scripts.main:cli
     ''',
     setup_requires=['pytest-runner'],
     tests_require=['pytest'],

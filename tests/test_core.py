@@ -4,11 +4,11 @@ from os import unlink
 
 import pytest
 
-from audioextractor.audio_extractor import AudioExtractor
+from audioclipcutter import AudioClipCutter
 
 TESTS_DIR = "tests/data/"
 
-class TestAudioExtractor:
+class TestAudioCutter:
     def assert_exported_clips(self, amountOfClips):
         for i in range(1, amountOfClips+1):
             extratedClipPath = join(TESTS_DIR, "clip%d.mp3" % i)
@@ -32,7 +32,7 @@ class TestAudioExtractor:
                 unlink(extratedClipPath)
 
     def test_audio_extract_using_filepath_m4a_input(self):
-        extractor = AudioExtractor('tests/data/synthesized_speech.mp3')
+        extractor = AudioClipCutter('tests/data/synthesized_speech.mp3')
         extractor.extractClips('tests/data/synthesized_speech.txt', TESTS_DIR)
 
         self.assert_exported_clips(6)

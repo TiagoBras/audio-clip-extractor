@@ -8,4 +8,4 @@ Choose an output directory
 
 Have the option to output files as a zip container
 
-
+Add optional argument to pass the location of ffmpeg executable 

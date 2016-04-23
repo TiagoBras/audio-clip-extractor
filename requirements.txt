@@ -1,0 +1,5 @@
+-e git+git@gitlab.com:TiagoBras/audio-clip-cutter.git@6f56e0ad32cd4a4855bae4e6ff851e06f6b675e7#egg=AudioClipExtractor
+click==6.6
+peppercorn==0.5
+tbutils==0.0.3
+utils==0.0.2

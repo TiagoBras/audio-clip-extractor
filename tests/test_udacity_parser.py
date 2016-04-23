@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from audioextractor.labels_parser import UdacityLabelsParser, AudioClipSpec
+from audioclipcutter import UdacityLabelsParser, AudioClipSpec
 import pytest
 
 class TestFoo:
