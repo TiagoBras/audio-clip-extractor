@@ -1,5 +1,5 @@
--e git+git@gitlab.com:TiagoBras/audio-clip-cutter.git@6f56e0ad32cd4a4855bae4e6ff851e06f6b675e7#egg=AudioClipExtractor
-click==6.6
+-e git+git@gitlab.com:TiagoBras/audio-clip-cutter.git@4e5f0f63efa9a26a8e515656faf9fec4c9882439#egg=audioclipcutter
 peppercorn==0.5
-tbutils==0.0.3
-utils==0.0.2
+py==1.4.31
+pytest==2.9.1
+-e git+git@gitlab.com:TiagoBras/python-helper-utils.git@25eeeeafcfba8460c1d39f2ccdcf1f1889b90ae2#egg=tbutils
