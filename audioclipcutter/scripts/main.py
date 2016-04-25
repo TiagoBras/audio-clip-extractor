@@ -4,7 +4,6 @@ import argparse
 import glob
 import shutil
 import os
-import fileinput
 
 from audioclipcutter import AudioClipCutter
 
@@ -50,13 +49,19 @@ def run(args):
 
     # If there's data being piped to stdin, consume it instead of processing r.files
     if checkIfThereIsDataBeingPipedToStdin():
-        files = [os.path.abs(f.strip()) for f in fileinput.input()]
+        files = [os.path.abspath(f.strip()) for f in sys.stdin]
+        print(files)
     else:
         files = r.files
 
     # Extract the clips
     for f in files:
         extractClips(os.path.abspath(f), r.ffmpeg, r.output_dir, r.zip)
+
+    # Show help message when no files are provided
+    if not files:
+        print("Error: No audio files to process.", file=sys.stderr)
+        parser.print_help()
 
 def extractClips(filepath, ffmpeg, outputDir, zipOutput):
     specsFile = "%s.txt" % os.path.splitext(filepath)[0]
@@ -85,7 +90,7 @@ def displayDownloadPage():
         message += 'https://ffmpeg.org/download.html#build-linux'
     elif sys.platform ==  'darwin':
         message += 'http://evermeet.cx/ffmpeg/'
-    elif sys.playtorm == 'win32':
+    elif sys.platform == 'win32':
         message += 'https://ffmpeg.zeranoe.com/builds/'
 
     print(message)

@@ -4,7 +4,7 @@
 *.pyc
 
 TEMPORARY_DATA_FILES/
-audioclipcutter/bin/
+tests/data/ffmpeg
 
 audioclipcutter.egg-info/
 __pycache__/

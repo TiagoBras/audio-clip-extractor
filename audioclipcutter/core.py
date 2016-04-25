@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import zipfile
-from subprocess import Popen, PIPE
+import subprocess
 
 from pkg_resources import resource_filename, Requirement
 
@@ -10,8 +10,8 @@ from .audacity_parser import UdacityLabelsParser, AudioClipSpec
 # import tbutils  # My utils library
 
 class AudioClipCutter(object):
-    def __init__(self, audioFilePathOrData, ffmpegPath):
-        self.audioFilePathOrData = audioFilePathOrData
+    def __init__(self, audioFilePath, ffmpegPath):
+        self.audioFilePath = audioFilePath
         self.ffmpegPath = ffmpegPath
         self._audioFileData = None
 
@@ -54,7 +54,7 @@ class AudioClipCutter(object):
             command += ['-nostats', '-loglevel', '0']
 
         command += [
-            '-i', 'pipe:0',
+            '-i', self.audioFilePath,
             '-ss', '%.3f' % audioClipSpec.start,
             '-t', '%.3f' % audioClipSpec.duration(),
             '-c', 'copy',
@@ -77,19 +77,7 @@ class AudioClipCutter(object):
 
         command.append('pipe:1')
 
-        # stderr=open(devnull, 'w')
-        p = Popen(command, stdin=PIPE, stdout=PIPE, bufsize=10**8)
-
-        # Send AUDIO DATA and get the CLIPPED DATA
-        r_stdout, r_stderr = p.communicate(self._audioData())
-
-        return r_stdout
-
-    def _audioData(self):
-        if self._audioFileData == None:
-            self._audioFileData = self._readFileData(self.audioFilePathOrData)
-
-        return self._audioFileData
+        return subprocess.check_output(command)
 
     def _readFileData(self, filePathOrData):
         data = None

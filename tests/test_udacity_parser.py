@@ -5,16 +5,9 @@ import os
 sys.path.insert(0, os.path.abspath('..'))
 
 from audioclipcutter.audacity_parser import UdacityLabelsParser, AudioClipSpec
-import pytest
 
-class TestFoo:
-    @pytest.fixture()
-    def hello(self):
-        return "Hello world!"
-
-    def test_add(self, hello):
-        print(hello)
-        assert 0 == 0
+TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
+TESTS_DATA_DIR = os.path.join(TESTS_DIR, 'data')
 
 class TestUdacityLabelsParser:
     def setup_class(self):
@@ -50,7 +43,8 @@ class TestUdacityLabelsParser:
 
 
     def test_read_labels_from_file(self):
-        parser = UdacityLabelsParser('tests/data/synthesized_speech.txt')
+        specsPath = os.path.join(TESTS_DATA_DIR, 'synthesized_speech.txt')
+        parser = UdacityLabelsParser(specsPath)
         clips = parser.parseClips()
 
         assert clips != None
@@ -60,14 +54,3 @@ class TestUdacityLabelsParser:
         for i in range(NUM_OF_CLIPS):
             assert abs(clips[i].duration() - self.EXPECTED_CLIPS[i].duration()) < 0.0001
             assert clips[i].text == self.EXPECTED_CLIPS[i].text
-
-    # def test_read_labels_from_string_as_class_method():
-    #     clips = UdacityLabelsParser.parseClips(LABELS_SAMPLE)
-    #
-    #     clip1 = AudioClipSpec(start=5.749493, end=6.328176)
-    #     clip2 = AudioClipSpec(start=7.012639, end=7.367316)
-    #
-    #     assert clip1.duration() == 0.578682
-    #     assert clip1.text == "1a f c"
-    #     assert clip2.duration() == 0.354676
-    #     assert clip2.text == "1b m c"
