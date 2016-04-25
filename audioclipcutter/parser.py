@@ -20,10 +20,10 @@ class AudioClipSpec(object):
     def __repr__(self):
         return "(%f, %f, %s)" % (self.start, self.end, self.text)
 
-class UdacityLabelsParser(object):
-    """docstring for UdacityLabelsParser"""
+class LabelsParser(object):
+    """docstring for LabelsParser"""
     def __init__(self, fileOrString):
-        super(UdacityLabelsParser, self).__init__()
+        super(LabelsParser, self).__init__()
 
         if isfile(fileOrString):
             self.inputType = InputType.FILE

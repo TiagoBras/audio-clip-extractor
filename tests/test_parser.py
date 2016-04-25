@@ -5,12 +5,12 @@ import os
 ROOT_DIR = os.path.abspath(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, ROOT_DIR)
 
-from audioclipcutter.audacity_parser import UdacityLabelsParser, AudioClipSpec
+from audioclipcutter.parser import LabelsParser, AudioClipSpec
 
 TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
 TESTS_DATA_DIR = os.path.join(TESTS_DIR, 'data')
 
-class TestUdacityLabelsParser:
+class TestLabelsParser:
     def setup_class(self):
         self.LABELS_SAMPLE = """
         0.303745	0.861787	Hello
@@ -31,7 +31,7 @@ class TestUdacityLabelsParser:
         ]
 
     def test_read_labels_from_string(self):
-        parser = UdacityLabelsParser(self.LABELS_SAMPLE)
+        parser = LabelsParser(self.LABELS_SAMPLE)
         clips = parser.parseClips()
 
         assert clips != None
@@ -44,7 +44,7 @@ class TestUdacityLabelsParser:
 
     def test_read_labels_from_file(self):
         specsPath = os.path.join(TESTS_DATA_DIR, 'synthesized_speech.txt')
-        parser = UdacityLabelsParser(specsPath)
+        parser = LabelsParser(specsPath)
         clips = parser.parseClips()
 
         assert clips != None

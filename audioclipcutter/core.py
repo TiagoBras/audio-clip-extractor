@@ -5,7 +5,7 @@ import subprocess
 
 from pkg_resources import resource_filename, Requirement
 
-from .audacity_parser import UdacityLabelsParser, AudioClipSpec
+from .parser import LabelsParser, AudioClipSpec
 
 # import tbutils  # My utils library
 
@@ -16,7 +16,7 @@ class AudioClipCutter(object):
         self._audioFileData = None
 
     def extractClips(self, specsFilePathOrData, outputDir=None, zipOutput=False):
-        parser = UdacityLabelsParser(specsFilePathOrData)
+        parser = LabelsParser(specsFilePathOrData)
         clips = parser.parseClips()
 
         # Output to current working directory if no outputDir was provided
