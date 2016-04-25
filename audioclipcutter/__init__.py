@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from .core import AudioClipCutter
 
 from .audacity_parser import UdacityLabelsParser, AudioClipSpec
