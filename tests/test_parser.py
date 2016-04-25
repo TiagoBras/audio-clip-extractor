@@ -2,7 +2,8 @@
 import sys
 import os
 
-sys.path.insert(0, os.path.abspath('..'))
+ROOT_DIR = os.path.abspath(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, ROOT_DIR)
 
 from audioclipcutter.audacity_parser import UdacityLabelsParser, AudioClipSpec
 
@@ -40,7 +41,6 @@ class TestUdacityLabelsParser:
         for i in range(NUM_OF_CLIPS):
             assert abs(clips[i].duration() - self.EXPECTED_CLIPS[i].duration()) < 0.0001
             assert clips[i].text == self.EXPECTED_CLIPS[i].text
-
 
     def test_read_labels_from_file(self):
         specsPath = os.path.join(TESTS_DATA_DIR, 'synthesized_speech.txt')

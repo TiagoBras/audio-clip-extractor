@@ -7,50 +7,36 @@ import os
 
 from audioclipcutter import AudioClipCutter
 
-class ParserResults(object):
-    def __init__(self, ffmpeg, files, zipOutput, outputDir):
-        self.ffmpeg = ffmpeg
-        self.files = files
-        self.zipOutput = zipOutput
-        self.outputDir = outputDir
-
-    def __repr__(self):
-        return "FFMPEG: {0}\nFiles: {1}\nZip: {2}\nOutputDir: {3}".format(
-            self.ffmpeg, self.files, self.zipOutput, self.outputDir
-        )
-
-
 def cli():
     run(sys.argv[1:])
 
 def run(args):
-    ffmpegFilename = 'ffmpeg.exe' if sys.platform == "win32" else 'ffmpeg'
+    ffmpegFilename = 'ffmpeg.exe' if sys.platform == 'win32' else 'ffmpeg'
 
-    parser = argparse.ArgumentParser(description="Audio Clip Cutter")
-    parser.add_argument('--ffmpeg', nargs=1, default=ffmpegFilename)
+    parser = argparse.ArgumentParser(description='Audio Clip Cutter')
+    parser.add_argument('--ffmpeg', default='')
     parser.add_argument('--output-dir', '-o', default='')
     parser.add_argument('--zip', '-z', action='store_true')
+    parser.add_argument('--skip-path-lookup', action='store_true')
     parser.add_argument('files', nargs='*')
 
-    r = parser.parse_args(sys.argv[1:])
-
-    print(r)
+    r = parser.parse_args(args)
 
     # If the ffmpeg executable provided doesn't exist, look elsewhere (PATH)
     if not os.path.isfile(r.ffmpeg):
-        path = shutil.which(ffmpegFilename)
+        if r.skip_path_lookup:
+            r.ffmpeg = shutil.which(ffmpegFilename)
 
-        if not path:
+        if not r.ffmpeg:
             print("`%s` not found." % ffmpegFilename, file=sys.stderr)
             displayDownloadPage()
             sys.exit(1)
 
-    file = None
+    files = None
 
     # If there's data being piped to stdin, consume it instead of processing r.files
     if checkIfThereIsDataBeingPipedToStdin():
         files = [os.path.abspath(f.strip()) for f in sys.stdin]
-        print(files)
     else:
         files = r.files
 
@@ -62,13 +48,14 @@ def run(args):
     if not files:
         print("Error: No audio files to process.", file=sys.stderr)
         parser.print_help()
+        sys.exit(2)
 
 def extractClips(filepath, ffmpeg, outputDir, zipOutput):
     specsFile = "%s.txt" % os.path.splitext(filepath)[0]
 
     if not os.path.isfile(specsFile):
-        print("`%s` not found." % specsFile, file=sys.stderr)
-        exit(1)
+        print("Error: `%s` not found." % specsFile, file=sys.stderr)
+        exit(3)
 
     acc = AudioClipCutter(filepath, ffmpeg)
     acc.extractClips(specsFile, outputDir, zipOutput)
