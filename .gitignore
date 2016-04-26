@@ -3,6 +3,8 @@
 .eggs/
 *.pyc
 
+activate.sh
+
 TEMPORARY_DATA_FILES/
 tests/data/ffmpeg
 
