@@ -2,41 +2,45 @@
 import sys
 import os
 import pytest
+import re
 
-ROOT_DIR = os.path.abspath(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-sys.path.insert(0, ROOT_DIR)
+import constants
 
-TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
-TESTS_DATA_DIR = os.path.join(TESTS_DIR, 'data')
+sys.path.insert(0, constants.ROOT_DIR)
 
 import audioclipcutter.scripts.main as main
 
 FFMPEG = 'ffmpeg.exe' if sys.platform == 'win32' else 'ffmpeg'
 
-def setup_module(module):
-    pass
+def test_version_argument():
+    assert re.search(r'\d+\.\d+\.\d+\w*', main.findVersion())
+
+def test_version_argument_when_there_is_no_version_defined():
+    with pytest.raises(RuntimeError):
+        # There no 'version=x.y.z' defined in this file so it must fail
+        main.findVersion(__file__)
 
 def test_passing_skip_path_lookup():
     # It should exit with code 1 since there's no ffmpeg
-    with pytest.raises(SystemExit) as cm:
+    with pytest.raises(SystemExit):
         main.run(['--skip-path-lookup'])
         assert pytest.capsys.readouterr()[0] == 1
 
 def test_passing_ffmpeg_path_with_no_files():
-    with pytest.raises(SystemExit) as cm:
-        main.run(['--ffmpeg', os.path.join(TESTS_DATA_DIR, FFMPEG)])
+    with pytest.raises(SystemExit):
+        main.run(['--ffmpeg', os.path.join(constants.TESTS_DATA_DIR, FFMPEG)])
         assert pytest.capsys.readouterr()[0] == 2
 
 def test_passing_ffmpeg_path_with_audio_filepath():
     args = [
-        '--ffmpeg', os.path.join(TESTS_DATA_DIR, FFMPEG),
-        '--output-dir', TESTS_DATA_DIR,
-        os.path.join(TESTS_DATA_DIR, 'synthesized_speech.mp3')
+        '--ffmpeg', os.path.join(constants.TESTS_DATA_DIR, FFMPEG),
+        '--output-dir', constants.TESTS_DATA_DIR,
+        os.path.join(constants.TESTS_DATA_DIR, 'synthesized_speech.mp3')
     ]
     main.run(args)
 
     for i in range(1, 7):
-        path = os.path.join(TESTS_DATA_DIR, "clip%d.mp3" % i)
+        path = os.path.join(constants.TESTS_DATA_DIR, "clip%d.mp3" % i)
 
         assert os.path.isfile(path), "'%s' not found" % path
 
@@ -44,14 +48,14 @@ def test_passing_ffmpeg_path_with_audio_filepath():
 
 def test_zip_option():
     args = [
-        '--ffmpeg', os.path.join(TESTS_DATA_DIR, FFMPEG),
-        '--output-dir', TESTS_DATA_DIR,
+        '--ffmpeg', os.path.join(constants.TESTS_DATA_DIR, FFMPEG),
+        '--output-dir', constants.TESTS_DATA_DIR,
         '--zip',
-        os.path.join(TESTS_DATA_DIR, 'synthesized_speech.mp3')
+        os.path.join(constants.TESTS_DATA_DIR, 'synthesized_speech.mp3')
     ]
     main.run(args)
 
-    path = os.path.join(TESTS_DATA_DIR, 'synthesized_speech_clips.zip')
+    path = os.path.join(constants.TESTS_DATA_DIR, 'synthesized_speech_clips.zip')
 
     assert os.path.isfile(path), "'%s' not found" % path
 
@@ -59,11 +63,11 @@ def test_zip_option():
 
 def test_passing_an_audio_file_with_no_matching_spec():
     args = [
-        '--ffmpeg', os.path.join(TESTS_DATA_DIR, FFMPEG),
-        '--output-dir', TESTS_DATA_DIR,
-        os.path.join(TESTS_DATA_DIR, 'expected_clip1.mp3')
+        '--ffmpeg', os.path.join(constants.TESTS_DATA_DIR, FFMPEG),
+        '--output-dir', constants.TESTS_DATA_DIR,
+        os.path.join(constants.TESTS_DATA_DIR, 'expected_clip1.mp3')
     ]
 
-    with pytest.raises(SystemExit) as cm:
+    with pytest.raises(SystemExit):
         main.run(args)
         assert pytest.capsys.readouterr()[0] == 3

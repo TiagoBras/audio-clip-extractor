@@ -2,13 +2,11 @@
 import sys
 import os
 
-ROOT_DIR = os.path.abspath(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-sys.path.insert(0, ROOT_DIR)
+import constants
+
+sys.path.insert(0, constants.ROOT_DIR)
 
 from audioclipcutter.parser import LabelsParser, AudioClipSpec
-
-TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
-TESTS_DATA_DIR = os.path.join(TESTS_DIR, 'data')
 
 class TestLabelsParser:
     def setup_class(self):
@@ -43,7 +41,7 @@ class TestLabelsParser:
             assert clips[i].text == self.EXPECTED_CLIPS[i].text
 
     def test_read_labels_from_file(self):
-        specsPath = os.path.join(TESTS_DATA_DIR, 'synthesized_speech.txt')
+        specsPath = os.path.join(constants.TESTS_DATA_DIR, 'synthesized_speech.txt')
         parser = LabelsParser(specsPath)
         clips = parser.parseClips()
 
