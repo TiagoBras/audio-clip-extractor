@@ -11,3 +11,5 @@ Have the option to output files as a zip container
 Add optional argument to pass the location of ffmpeg executable
 
 Add option to download ffmpeg automatically (or at least provide link)
+
+Add --version -V optional argument 

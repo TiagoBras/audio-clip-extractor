@@ -52,3 +52,28 @@ class TestLabelsParser:
         for i in range(NUM_OF_CLIPS):
             assert abs(clips[i].duration() - self.EXPECTED_CLIPS[i].duration()) < 0.0001
             assert clips[i].text == self.EXPECTED_CLIPS[i].text
+
+    def test_read_labels_from_string_with_no_text(self):
+        NUM_OF_CLIPS = 5
+        labels = """
+        0.5 20 Foo
+        34  50
+        103.44 130
+        150 173 Bar
+        .203 205.
+        """
+        specs = LabelsParser(labels).parseClips()
+
+        assert specs
+        assert len(specs) == NUM_OF_CLIPS
+
+        expectedSpecs = [
+            AudioClipSpec(start=0.5, end=20, text="Foo"),
+            AudioClipSpec(start=34, end=50, text=""),
+            AudioClipSpec(start=103.44, end=130, text=""),
+            AudioClipSpec(start=150, end=173, text="Bar")
+        ]
+
+        for spec, expectedSpec in zip(specs, expectedSpecs):
+            assert abs(spec.duration() - expectedSpec.duration()) < 0.0001
+            assert spec.text == expectedSpec.text

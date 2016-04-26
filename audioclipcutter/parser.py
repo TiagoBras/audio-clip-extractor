@@ -32,11 +32,11 @@ class LabelsParser(object):
 
         self.inputValue = fileOrString
 
-        begin = r'(?P<begin>0*\d*\.?\d*)'
-        end = r'(?P<end>0*\d*\.?\d*)'
+        begin = r'(?P<begin>\d+\.\d*|\d*\.\d+|\d+)'
+        end = r'(?P<end>\d+\.\d*|\d*\.\d+|\d+)'
         text = r'(?P<text>.*)'
 
-        regex = r'\s+'.join([begin, end, text])
+        regex = begin + r'\s+' + end + text
 
         self.linePattern = re.compile(regex)
 
@@ -61,9 +61,8 @@ class LabelsParser(object):
 
         return clips
 
-
     def _parseLine(self, line):
-        r = self.linePattern.match(line)
+        r = self.linePattern.search(line)
 
         if r == None:
             return None
@@ -73,4 +72,4 @@ class LabelsParser(object):
         if len(d['begin']) == 0 or len(d['end']) == 0:
             return None
         else:
-            return AudioClipSpec(d['begin'], d['end'], d['text'])
+            return AudioClipSpec(d['begin'], d['end'], d['text'].strip())
