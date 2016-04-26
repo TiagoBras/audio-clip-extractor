@@ -1,2 +1,1 @@
-include runner
-# recursive-include ffmpeg
+include LICENSE.tx

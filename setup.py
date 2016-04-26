@@ -5,9 +5,9 @@ except ImportError:
 
 setup(
     name='audioclipcutter',
-    version='0.1.8',
+    version='0.1.9',
     description='Easily extract multiple clips from audio files',
-    long_description=open('README.rst').read(),
+    long_description=open('README.md').read(),
     license='MIT',
     author='Tiago Bras',
     author_email='tiagodsbras@gmail.com',
@@ -15,20 +15,25 @@ setup(
     url='http://tiagobras.com',
     packages=find_packages(exclude=[]),
     include_package_data=True,
-    # package_dir={'': 'src'},
-    package_data = {
-        # 'audioclipcutter': ['bin/*'],
-    },
-    install_requires=[
-        # 'Click',
-        # 'python-helper-utils'
+    classifiers=[
+        'Development Status :: 3 - Alpha',
+        'Environment :: Console',
+        'Intended Audience :: Developers',
+        'Intended Audience :: End Users/Desktop',
+        'License :: OSI Approved :: MIT License',
+        'Natural Language :: English',
+        'Operating System :: MacOS',
+        'Operating System :: Microsoft :: Windows',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.0',
+        'Programming Language :: Python :: 3.1',
+        'Programming Language :: Python :: 3.2',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Topic :: Multimedia :: Sound/Audio :: Conversion',
+        'Topic :: Utilities'
     ],
-    dependency_links=[
-    #     "git+ssh://git@gitlab.com:TiagoBras/python-helper-utils.git"
-        # "../TBUtils"
-    ],
-    # data_files=[('my_data', ['ffmpeg/ffmpeg', 'ffmpeg/ffmpeg.exe'])],
-    # scripts = ["runner"],
     entry_points='''
         [console_scripts]
         audiocutter=audioclipcutter.scripts.main:cli
