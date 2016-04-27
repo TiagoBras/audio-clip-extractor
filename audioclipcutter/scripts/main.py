@@ -25,19 +25,20 @@ def run(args):
     parser.add_argument('--output-dir', '-o', default='')
     parser.add_argument('--zip', '-z', action='store_true')
     parser.add_argument('--skip-path-lookup', action='store_true')
+    parser.add_argument('--text-var', '-m', default='m_text')
     parser.add_argument('files', nargs='*')
 
     r = parser.parse_args(args)
 
     if r.version:
-        print("AudioClipCutter %s" % findVersion())
+        print("AudioClipCutter %s" % version())
         sys.exit(0)
 
 
     # If the ffmpeg executable provided doesn't exist, look elsewhere (PATH)
     if not os.path.isfile(r.ffmpeg):
         if not r.skip_path_lookup:
-            r.ffmpeg = shutil.which(ffmpegFilename)
+            r.ffmpeg = which(ffmpegFilename)
 
         if not r.ffmpeg:
             print("`%s` not found." % ffmpegFilename, file=sys.stderr)
@@ -54,7 +55,7 @@ def run(args):
 
     # Extract the clips
     for f in files:
-        extractClips(os.path.abspath(f), r.ffmpeg, r.output_dir, r.zip)
+        extractClips(os.path.abspath(f), r.ffmpeg, r.output_dir, r.zip, r.text_var)
 
     # Show help message when no files are provided
     if not files:
@@ -62,7 +63,7 @@ def run(args):
         parser.print_help()
         sys.exit(2)
 
-def extractClips(filepath, ffmpeg, outputDir, zipOutput):
+def extractClips(filepath, ffmpeg, outputDir, zipOutput, textVar):
     specsFile = "%s.txt" % os.path.splitext(filepath)[0]
 
     if not os.path.isfile(specsFile):
@@ -70,6 +71,7 @@ def extractClips(filepath, ffmpeg, outputDir, zipOutput):
         exit(3)
 
     acc = AudioClipCutter(filepath, ffmpeg)
+    acc.textVar = textVar
     acc.extractClips(specsFile, outputDir, zipOutput)
 
 def checkIfThereIsDataBeingPipedToStdin():
@@ -94,15 +96,20 @@ def displayDownloadPage():
 
     print(message)
 
-def findVersion(filepath=SETUP_PATH):
-    prog = re.compile(r'(__)?version(__)?\s*=\s*[\'\"](?P<VERSION>[^\'\"]+)[\'\"]')
+def version(directory=ROOT_DIR):
+    with open(os.path.join(directory, 'VERSION')) as f:
+        return f.read().strip()
 
-    version = None
-    with open(filepath, 'r') as f:
-        for line in f:
-            result = prog.search(line)
+    raise IOError("Error: 'VERSION' file not found.")
 
-            if result:
-                return result.groupdict()['VERSION']
 
-    raise RuntimeError("Error: version not defined in '%s'" % filepath)
+def which(filename):
+    if sys.version_info >= (3,3):
+        return shutil.which(filename)
+    else:
+        for d in os.getenv('PATH').split(os.path.pathsep):
+            path = os.path.join(d, filename)
+            if os.path.isfile(path):
+                return path
+
+        return None
