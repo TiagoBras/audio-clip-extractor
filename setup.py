@@ -7,7 +7,7 @@ def version():
     with open('VERSION') as f:
         return f.read().strip()
 
-    raise FileNotFoundError("Error: 'VERSION' file not found.")
+    raise IOError("Error: 'VERSION' file not found.")
     
 setup(
     name='audioclipcutter',
