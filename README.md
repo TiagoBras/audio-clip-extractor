@@ -36,7 +36,7 @@ How it works
 ------------
 
 ```
-$ audioclipcutter audio_to_cut_from.mp3 `
+$ audioclipcutter audio_to_cut_from.mp3
 
 ```
 
@@ -91,4 +91,4 @@ Arguments
 Notes
 -----
 
-<To write about using the code>
+Work in progress: to write about using the code and examples
