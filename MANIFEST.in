@@ -1,1 +1,6 @@
-include LICENSE.tx
+include LICENSE.txt
+include VERSION
+global-exclude *.pyc
+prune tests/__pycache__
+prune tests/data/audacity_project
+recursive-include tests *.py

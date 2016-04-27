@@ -13,12 +13,12 @@ import audioclipcutter.scripts.main as main
 FFMPEG = 'ffmpeg.exe' if sys.platform == 'win32' else 'ffmpeg'
 
 def test_version_argument():
-    assert re.search(r'\d+\.\d+\.\d+\w*', main.findVersion())
+    assert re.search(r'\d+\.\d+\.\d+\w*', main.version())
 
 def test_version_argument_when_there_is_no_version_defined():
-    with pytest.raises(RuntimeError):
-        # There no 'version=x.y.z' defined in this file so it must fail
-        main.findVersion(__file__)
+    with pytest.raises(IOError):
+        # There no VERSION file in tests folder
+        main.version(constants.TESTS_DIR)
 
 def test_passing_skip_path_lookup():
     # It should exit with code 1 since there's no ffmpeg
@@ -71,3 +71,6 @@ def test_passing_an_audio_file_with_no_matching_spec():
     with pytest.raises(SystemExit):
         main.run(args)
         assert pytest.capsys.readouterr()[0] == 3
+
+def test_text_var():
+    pass

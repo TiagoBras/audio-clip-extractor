@@ -11,9 +11,18 @@ from .parser import LabelsParser, AudioClipSpec
 
 class AudioClipCutter(object):
     def __init__(self, audioFilePath, ffmpegPath):
-        self.audioFilePath = audioFilePath
-        self.ffmpegPath = ffmpegPath
+        self._audioFilePath = audioFilePath
+        self._ffmpegPath = ffmpegPath
         self._audioFileData = None
+        self._textVar = 'm_text'
+
+    @property
+    def textVar(self):
+        return self._textVar
+
+    @textVar.setter
+    def textVar(self, value):
+        self._textVar = value
 
     def extractClips(self, specsFilePathOrData, outputDir=None, zipOutput=False):
         parser = LabelsParser(specsFilePathOrData)
@@ -48,13 +57,13 @@ class AudioClipCutter(object):
             zipFile.close()
 
     def _extractClipData(self, audioClipSpec, showLogs=False):
-        command = [self.ffmpegPath]
+        command = [self._ffmpegPath]
 
         if not showLogs:
             command += ['-nostats', '-loglevel', '0']
 
         command += [
-            '-i', self.audioFilePath,
+            '-i', self._audioFilePath,
             '-ss', '%.3f' % audioClipSpec.start,
             '-t', '%.3f' % audioClipSpec.duration(),
             '-c', 'copy',
@@ -65,7 +74,7 @@ class AudioClipCutter(object):
         ]
 
         # Add clip TEXT as metadata and set a few more to default
-        metadata = dict(m_text=audioClipSpec.text)
+        metadata = {self._textVar: audioClipSpec.text}
             # title='Extracted clip',
             # album='N/A',
             # genre='Shadowing',

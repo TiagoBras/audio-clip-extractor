@@ -3,9 +3,15 @@ try:
 except ImportError:
     from distutils.core import setup, find_packages
 
+def version():
+    with open('VERSION') as f:
+        return f.read().strip()
+
+    raise FileNotFoundError("Error: 'VERSION' file not found.")
+    
 setup(
     name='audioclipcutter',
-    version='0.1.9',
+    version=version(),
     description='Easily extract multiple clips from audio files',
     long_description=open('README.md').read(),
     license='MIT',
@@ -36,7 +42,7 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        audiocutter=audioclipcutter.scripts.main:cli
+        audioclipcutter=audioclipcutter.scripts.main:cli
     ''',
     setup_requires=['pytest-runner'],
     tests_require=['pytest'],
