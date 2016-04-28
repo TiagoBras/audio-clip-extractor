@@ -17,8 +17,8 @@ setup(
     license='MIT',
     author='Tiago Bras',
     author_email='tiagodsbras@gmail.com',
-    download_url='http://tiagobras.com/download',
-    url='http://tiagobras.com',
+    download_url='https://github.com/TiagoBras/audio-clip-extractor/archive/v0.2.0.zip',
+    url='https://github.com/TiagoBras/audio-clip-extractor',
     packages=find_packages(exclude=[]),
     include_package_data=True,
     classifiers=[
@@ -42,7 +42,7 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        audioclipextractor=audioclipextractor.scripts.main:cli
+        ace=audioclipextractor.scripts.main:cli
     ''',
     setup_requires=['pytest-runner'],
     tests_require=['pytest'],
