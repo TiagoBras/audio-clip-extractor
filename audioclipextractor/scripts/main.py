@@ -3,10 +3,8 @@ from __future__ import print_function, absolute_import
 
 import sys
 import argparse
-import glob
 import shutil
 import os
-import re
 
 from audioclipextractor import AudioClipExtractor
 
@@ -19,13 +17,21 @@ def cli():
 def run(args):
     ffmpegFilename = 'ffmpeg.exe' if sys.platform == 'win32' else 'ffmpeg'
 
-    parser = argparse.ArgumentParser(description='Audio Clip Cutter')
-    parser.add_argument('--version', '-V', action='store_true')
-    parser.add_argument('--ffmpeg', default='')
-    parser.add_argument('--output-dir', '-o', default='')
-    parser.add_argument('--zip', '-z', action='store_true')
+    parser = argparse.ArgumentParser(description='''
+        This utility allows one to cut multiple clips 
+        from a single or multiple audio files.
+        ''')
+    parser.add_argument('--version', '-V', action='store_true', 
+        help='Print the version of the script')
+    parser.add_argument('--ffmpeg', default='', 
+        help='Specify the FFMPEG executable path')
+    parser.add_argument('--output-dir', '-o', default='', 
+        help='Set the output directory')
+    parser.add_argument('--zip', '-z', action='store_true', 
+        help='Archive the output in a zip container')
     parser.add_argument('--skip-path-lookup', action='store_true')
-    parser.add_argument('--text-var', '-m', default='m_text')
+    parser.add_argument('--text-name', '-m', default='m_text', 
+        help='Specify the name of the embedded text variable')
     parser.add_argument('files', nargs='*')
 
     r = parser.parse_args(args)
@@ -55,7 +61,7 @@ def run(args):
 
     # Extract the clips
     for f in files:
-        extractClips(os.path.abspath(f), r.ffmpeg, r.output_dir, r.zip, r.text_var)
+        extractClips(os.path.abspath(f), r.ffmpeg, r.output_dir, r.zip, r.text_name)
 
     # Show help message when no files are provided
     if not files:

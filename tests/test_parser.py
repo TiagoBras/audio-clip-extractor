@@ -61,7 +61,7 @@ class TestAudioClipSpec(object):
         with pytest.raises(ValueError):
             s.start = -5.0
 
-        # When <start> is greater or equal than <end>
+        # When <start> is equal or greater than <end>
         with pytest.raises(ValueError):
             s.start = 6.0
 
@@ -69,7 +69,7 @@ class TestAudioClipSpec(object):
         with pytest.raises(ValueError):
             s.end = -5.0
 
-        # When <end> is greater or equal than <end>
+        # When <end> is equal or greater than <end>
         with pytest.raises(ValueError):
             s.end = 0.5
 

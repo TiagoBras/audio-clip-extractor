@@ -44,7 +44,10 @@ The script looks for a file with the same name as the audio file but with the ex
 <begin_clip:seconds> <end_clip:seconds> [<text>]
 ```
 
-Example:
+*Begin clip* **CANNOT** be equal or greater to *End clip*. 
+
+
+**Example:**
 
 ```
 1.50    6.20    Hello World!
@@ -63,33 +66,70 @@ $ find . -name '*.mp3' -type f | audioclipextractor --zip
 But since we can't have a single specifications file for multiple audio files, this isn't very useful yet. In the future we will be able to, for instance, cut out the first 15s for each file.
 
 
-Options
--------
+Comand Line Options
+-------------------
 
 ```
 --version, -V
-    Displays the version of the script
+    Prints the version of the script
 
 --zip, -z
-    Archives the output in a zip container
+    Archive the output in a zip container
 
 --ffmpeg <FILEPATH>
-    Sets the FFMPEG executable path
+    Specify the FFMPEG executable path
 
 --output-dir, -o
-    Sets the output directory
+    Set the output directory
 
---text-var, -m
-    Sets the name of the embedded text variable
+--text-name, -m
+    Specify the name of the embedded text variable
 
 [files]
     Audio files to process
 ```
 
+How to use it in your projects
+------------------------------
+
+I recommend installing [virtualenv](https://virtualenv.pypa.io/en/latest/installation.html) 
+to create an isolated environment.
+
+**Example:**
+
+```
+$ pip install virtualenv
+$ virtualenv venv
+$ source venv/bin/activate
+$ pip install audioclipextractor
+(venv) $ python example.py
+```
+
+example.py
+
+```Python
+from audioclipextractor import AudioClipExtractor, SpecsParser
+
+# Inicialize the extractor
+ext = AudioClipExtractor('/path/to/audio/file.mp3', '/path/to/ffmpeg')
+
+# Define the clips to extract
+# It's possible to pass a file instead of a string
+specs = '''
+	3.5     17      Winter is coming.
+	26      32.4    Summer child.
+	40      58.9    Hodor. Hodor. Hodor.
+'''
+
+# Extract the clips according to the specs and save them as a zip archive
+ext.extractClips(specs, '/path/to/output/directory', zipOutput=True)
+```
+
+
 Notes
 -----
 
-Work in progress: to write about using the code and examples
+This is still a work in progress. Feel free to use it, fork it and give suggestions.
 
 
 License

@@ -12,7 +12,7 @@ class AudioClipSpec(object):
 
     Raises:
         ValueError: `start` and `end` can't be negative
-        ValueError: `start` can't be greater or equal than `end`
+        ValueError: `start` can't be equal or greater than `end`
     """
     def __init__(self, start, end, text=''):
         super(AudioClipSpec, self).__init__()
@@ -24,7 +24,7 @@ class AudioClipSpec(object):
             raise ValueError("<start> or <end> can't be less than 0")
 
         if self._start >= self._end:
-            raise ValueError("<start> can't be greater or equal than <end>, %2f >= %2.f", self._start, self._end)
+            raise ValueError("<start> can't be equal or greater than <end>, %2f >= %2.f", self._start, self._end)
 
 
     def duration(self):
@@ -45,7 +45,7 @@ class AudioClipSpec(object):
             raise ValueError("<value> can't be less than 0")
 
         if value >= self._end:
-            raise ValueError("<start> can't be greater or equal than <end>, %2f >= %2.f", value, self._end)
+            raise ValueError("<start> can't be equal or greater than <end>, %2f >= %2.f", value, self._end)
         self._start = value
 
     # Property: end
