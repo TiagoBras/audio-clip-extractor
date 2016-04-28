@@ -8,7 +8,7 @@ import constants
 
 sys.path.insert(0, constants.ROOT_DIR)
 
-import audioclipcutter.scripts.main as main
+import audioclipextractor.scripts.main as main
 
 FFMPEG = 'ffmpeg.exe' if sys.platform == 'win32' else 'ffmpeg'
 

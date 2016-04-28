@@ -10,7 +10,7 @@ def version():
     raise IOError("Error: 'VERSION' file not found.")
     
 setup(
-    name='audioclipcutter',
+    name='audioclipextractor',
     version=version(),
     description='Easily extract multiple clips from audio files',
     long_description=open('README.md').read(),
@@ -42,7 +42,7 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        audioclipcutter=audioclipcutter.scripts.main:cli
+        audioclipextractor=audioclipextractor.scripts.main:cli
     ''',
     setup_requires=['pytest-runner'],
     tests_require=['pytest'],

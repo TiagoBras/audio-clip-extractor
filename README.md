@@ -1,5 +1,5 @@
-Audio Clip Cutter
-=================
+Audio Clip Extractor
+====================
 
 This utility allows one to cut multiple clips from a single or multiple audio files.
 
@@ -13,22 +13,20 @@ Requirements
 
 *FFMPEG* executable is mandatory to be able to run this. It can be downloaded for free
  [here](https://ffmpeg.org/download.html).
+After installing it, you can either add it to your *PATH* or pass it as an argument `--ffmpeg <ffmpegPath>`.
 
- After installing it, you can either add it to your *PATH*
- or pass it as an argument `--ffmpeg <ffmpegPath>`.
-
-For each audio file there needs to be a file with the same name but with **.txt** extension with the clips timestamps (check section **How it works** for further information).
+For each audio file there needs to be a file with the same name but with **.txt** extension with the respective clips' timestamps (check under section **How it works** for further information).
 
 Note: *In future versions it will be possible to pass timestamps as optional arguments.*
 
 
-How to install
---------------
+Installation
+------------
 
 Use **pip** with following command:
 
  ```Bash
-    $ pip install audioclipcutter
+    $ pip install audioclipextractor
  ```
 
 
@@ -36,7 +34,7 @@ How it works
 ------------
 
 ```
-$ audioclipcutter audio_to_cut_from.mp3
+$ audioclipextractor audio_to_cut_from.mp3
 
 ```
 
@@ -59,14 +57,14 @@ The `<text>` part is completely optional, but if provided it will be embedded in
 It can also be piped to, example:
 
 ```
-$ find . -name '*.mp3' -type f | audioclipcutter --zip
+$ find . -name '*.mp3' -type f | audioclipextractor --zip
 ```
 
 But since we can't have a single specifications file for multiple audio files, this isn't very useful yet. In the future we will be able to, for instance, cut out the first 15s for each file.
 
 
-Arguments
----------
+Options
+-------
 
 ```
 --version, -V
@@ -92,3 +90,9 @@ Notes
 -----
 
 Work in progress: to write about using the code and examples
+
+
+License
+-------
+
+AudioClipCutter is available under the [MIT License](http://opensource.org/licenses/MIT).

@@ -5,27 +5,51 @@ import subprocess
 
 from pkg_resources import resource_filename, Requirement
 
-from .parser import LabelsParser, AudioClipSpec
+from .parser import SpecsParser, AudioClipSpec
 
-class AudioClipCutter(object):
+class AudioClipExtractor(object):
+    """Extracts clips from audio files.
+    
+    Arguments:
+        audioFilePath (str): Path to the file to extract clips from
+        ffmpegPath (str): Path to the ffmpeg executable
+
+    Attributes:
+        textMetadataName (str) - getter/setter
+            The variable name used to embed text in the output clip
+    """
     def __init__(self, audioFilePath, ffmpegPath):
+        super(AudioClipExtractor, self).__init__()
         self._audioFilePath = audioFilePath
         self._ffmpegPath = ffmpegPath
-        self._audioFileData = None
-        self._textVar = 'm_text'
+        self._textMetadataName = 'm_text'
 
     @property
-    def textVar(self):
-        return self._textVar
+    def textMetadataName(self):
+        return self._textMetadataName
 
-    @textVar.setter
-    def textVar(self, value):
-        self._textVar = value
+    @textMetadataName.setter
+    def textMetadataName(self, value):
+        self._textMetadataName = value
 
-    def extractClips(self, specsFilePathOrData, outputDir=None, zipOutput=False):
-        '''Extract clips from a audio file according to specsFilePathOrData'''
-        parser = LabelsParser(specsFilePathOrData)
-        clips = parser.parseClips()
+    def extractClips(self, specsFilePathOrStr, outputDir=None, zipOutput=False):
+        """Extract clips according to the specification file or string.
+        
+        Arguments:
+            specsFilePathOrStr (str): Specification file path or string
+            outputDir (str): Location of the extracted clips
+            zipOutput (bool): Archive extracted clips' flag
+
+        Specifications format:
+            <begin:seconds> <end:seconds> [<text_metadata>]
+
+            20.5    59.75   Discussion about dogs
+            105.3   200.3   Cat story
+
+        Notes:
+            <text_metadata> is completely optional
+        """
+        clips = SpecsParser.parse(specsFilePathOrStr)
 
         # Output to current working directory if no outputDir was provided
         if not outputDir:
@@ -33,7 +57,7 @@ class AudioClipCutter(object):
 
         zipFile = None
         if zipOutput:
-            bname = os.path.splitext(os.path.basename(specsFilePathOrData))[0]
+            bname = os.path.splitext(os.path.basename(specsFilePathOrStr))[0]
             zipPath = "%s_clips.zip" % bname
             zipFile = zipfile.ZipFile(os.path.join(outputDir, zipPath), mode='w')
 
@@ -56,6 +80,12 @@ class AudioClipCutter(object):
             zipFile.close()
 
     def _extractClipData(self, audioClipSpec, showLogs=False):
+        """Extracts a single clip according to audioClipSpec.
+
+        Arguments:
+            audioClipSpec (AudioClipSpec): Clip specification
+            showLogs (bool): Show ffmpeg output
+        """
         command = [self._ffmpegPath]
 
         if not showLogs:
@@ -73,7 +103,7 @@ class AudioClipCutter(object):
         ]
 
         # Add clip TEXT as metadata and set a few more to default
-        metadata = { self._textVar: audioClipSpec.text }
+        metadata = { self._textMetadataName: audioClipSpec.text }
 
         for k, v in metadata.items():
             command.append('-metadata')

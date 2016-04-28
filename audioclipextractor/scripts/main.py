@@ -8,7 +8,7 @@ import shutil
 import os
 import re
 
-from audioclipcutter import AudioClipCutter
+from audioclipextractor import AudioClipExtractor
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 SETUP_PATH = os.path.join(ROOT_DIR, 'setup.py')
@@ -31,7 +31,7 @@ def run(args):
     r = parser.parse_args(args)
 
     if r.version:
-        print("AudioClipCutter %s" % version())
+        print("AudioClipExtractor %s" % version())
         sys.exit(0)
 
 
@@ -70,7 +70,7 @@ def extractClips(filepath, ffmpeg, outputDir, zipOutput, textVar):
         print("Error: `%s` not found." % specsFile, file=sys.stderr)
         exit(3)
 
-    acc = AudioClipCutter(filepath, ffmpeg)
+    acc = AudioClipExtractor(filepath, ffmpeg)
     acc.textVar = textVar
     acc.extractClips(specsFile, outputDir, zipOutput)
 

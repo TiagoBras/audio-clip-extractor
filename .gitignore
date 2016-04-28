@@ -8,11 +8,10 @@ activate.sh
 TEMPORARY_DATA_FILES/
 tests/data/ffmpeg
 
-audioclipcutter.egg-info/
+*.egg-info/
 __pycache__/
 
 # This might have to be remove from this ignore list more down the line
 dist/
 build/
 
-AudioClipExtractor.egg-info/

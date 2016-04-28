@@ -7,7 +7,7 @@ import constants
 
 sys.path.insert(0, constants.ROOT_DIR)
 
-from audioclipcutter.core import AudioClipCutter
+from audioclipextractor.core import AudioClipExtractor
 
 def findFileRecursively(filename, directory):
     for root, dirs, files in os.walk(directory):
@@ -20,7 +20,7 @@ def findFileRecursively(filename, directory):
 def joinDataDir(filename):
     return os.path.join(constants.TESTS_DATA_DIR, filename)
 
-class TestAudioClipCutter:
+class TestAudioClipExtractor:
     def setup_class(self):
         filename = 'ffmpeg.exe' if sys.platform == "win32" else 'ffmpeg'
 
@@ -38,7 +38,7 @@ class TestAudioClipCutter:
         assert self.ffmpegPath, "`%s` not found." % self.ffmpegPath
 
     def test_audio_extract(self):
-        extractor = AudioClipCutter(self.audioPath, self.ffmpegPath)
+        extractor = AudioClipExtractor(self.audioPath, self.ffmpegPath)
         extractor.extractClips(self.specsPath, constants.TESTS_DATA_DIR)
 
         for extractedClipPath, expectedClipPath in zip(
@@ -65,7 +65,7 @@ class TestAudioClipCutter:
                 os.unlink(extractedClipPath)
 
     def test_audio_extract_with_zip_archiving(self):
-        extractor = AudioClipCutter(self.audioPath, self.ffmpegPath)
+        extractor = AudioClipExtractor(self.audioPath, self.ffmpegPath)
         extractor.extractClips(self.specsPath, constants.TESTS_DATA_DIR, zipOutput=True)
 
         extractedZipPath = joinDataDir('synthesized_speech_clips.zip')
