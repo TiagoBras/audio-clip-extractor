@@ -116,9 +116,9 @@ ext = AudioClipExtractor('/path/to/audio/file.mp3', '/path/to/ffmpeg')
 # Define the clips to extract
 # It's possible to pass a file instead of a string
 specs = '''
-	3.5     17      Winter is coming.
-	26      32.4    Summer child.
-	40      58.9    Hodor. Hodor. Hodor.
+    3.5     17      Winter is coming.
+    26      32.4    Summer child.
+    40      58.9    Hodor. Hodor. Hodor.
 '''
 
 # Extract the clips according to the specs and save them as a zip archive
@@ -129,6 +129,7 @@ ext.extractClips(specs, '/path/to/output/directory', zipOutput=True)
 Notes
 -----
 
+This won't probably be called this
 This is still a work in progress. Feel free to use it, fork it and give suggestions.
 
 

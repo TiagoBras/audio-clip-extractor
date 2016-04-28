@@ -1,4 +1,2 @@
--e git+git@gitlab.com:TiagoBras/audio-clip-cutter.git@4694b41e36733b63b89b970607d315edbca7a5a3#egg=audioclipcutter
-peppercorn==0.5
 py==1.4.31
 pytest==2.9.1
