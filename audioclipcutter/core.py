@@ -7,8 +7,6 @@ from pkg_resources import resource_filename, Requirement
 
 from .parser import LabelsParser, AudioClipSpec
 
-# import tbutils  # My utils library
-
 class AudioClipCutter(object):
     def __init__(self, audioFilePath, ffmpegPath):
         self._audioFilePath = audioFilePath
@@ -25,6 +23,7 @@ class AudioClipCutter(object):
         self._textVar = value
 
     def extractClips(self, specsFilePathOrData, outputDir=None, zipOutput=False):
+        '''Extract clips from a audio file according to specsFilePathOrData'''
         parser = LabelsParser(specsFilePathOrData)
         clips = parser.parseClips()
 
@@ -74,11 +73,7 @@ class AudioClipCutter(object):
         ]
 
         # Add clip TEXT as metadata and set a few more to default
-        metadata = {self._textVar: audioClipSpec.text}
-            # title='Extracted clip',
-            # album='N/A',
-            # genre='Shadowing',
-            # artist='N/A')
+        metadata = { self._textVar: audioClipSpec.text }
 
         for k, v in metadata.items():
             command.append('-metadata')
@@ -87,19 +82,3 @@ class AudioClipCutter(object):
         command.append('pipe:1')
 
         return subprocess.check_output(command)
-
-    def _readFileData(self, filePathOrData):
-        data = None
-        try:
-            none = self.filePathOrData.read()
-        except Exception as e:
-            pass
-
-        if not data:
-            try:
-                with open(filePathOrData, 'rb') as f:
-                    data = f.read()
-            except Exception as e:
-                raise
-
-        return data
