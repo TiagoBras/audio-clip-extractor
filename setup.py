@@ -3,21 +3,25 @@ try:
 except ImportError:
     from distutils.core import setup, find_packages
 
+import os
+
 def version():
-    with open('VERSION') as f:
+    with open(os.path.abspath('VERSION')) as f:
         return f.read().strip()
 
     raise IOError("Error: 'VERSION' file not found.")
-    
+
+VERSION = version()
+
 setup(
     name='audioclipextractor',
-    version=version(),
+    version=VERSION,
     description='Easily extract multiple clips from audio files',
-    long_description=open('README.md').read(),
+    long_description=open(os.path.abspath('README')).read(),
     license='MIT',
     author='Tiago Bras',
     author_email='tiagodsbras@gmail.com',
-    download_url='https://github.com/TiagoBras/audio-clip-extractor/tarball/v0.2.1',
+    download_url='https://github.com/TiagoBras/audio-clip-extractor/tarball/v%s' % VERSION,
     url='https://github.com/TiagoBras/audio-clip-extractor',
     packages=find_packages(exclude=[]),
     include_package_data=True,
