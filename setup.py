@@ -17,7 +17,7 @@ setup(
     license='MIT',
     author='Tiago Bras',
     author_email='tiagodsbras@gmail.com',
-    download_url='https://github.com/TiagoBras/audio-clip-extractor/archive/v0.2.0.zip',
+    download_url='https://github.com/TiagoBras/audio-clip-extractor/archive/master.zip',
     url='https://github.com/TiagoBras/audio-clip-extractor',
     packages=find_packages(exclude=[]),
     include_package_data=True,
