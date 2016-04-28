@@ -17,7 +17,7 @@ setup(
     name='audioclipextractor',
     version=VERSION,
     description='Easily extract multiple clips from audio files',
-    long_description=open(os.path.abspath('README')).read(),
+    long_description=open(os.path.abspath('README.md')).read(),
     license='MIT',
     author='Tiago Bras',
     author_email='tiagodsbras@gmail.com',
