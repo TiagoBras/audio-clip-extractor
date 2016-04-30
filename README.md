@@ -44,7 +44,7 @@ The script looks for a file with the same name as the audio file but with the ex
 <begin_clip:seconds> <end_clip:seconds> [<text>]
 ```
 
-*Begin clip* **CANNOT** be equal or greater to *End clip*. 
+*Begin clip* **CANNOT** be equal to or greater than *End clip*. 
 
 
 **Example:**
