@@ -23,7 +23,8 @@ class AudioClipExtractor(object):
         self._audioFilePath = audioFilePath
         self._ffmpegPath = ffmpegPath
         self._bitrate = bitrate
-        self._textMetadataName = 'm_text'
+        self._textMetadataName = 'title'
+        self._textMetadataTrack = 'track'
 
     @property
     def textMetadataName(self):
@@ -104,7 +105,8 @@ class AudioClipExtractor(object):
         ]
 
         # Add clip TEXT as metadata and set a few more to default
-        metadata = { self._textMetadataName: audioClipSpec.text }
+        metadata = { self._textMetadataName: audioClipSpec.text, 
+        self._textMetadataTrack: audioClipSpec.track }
 
         for k, v in metadata.items():
             command.append('-metadata')

@@ -14,11 +14,12 @@ class AudioClipSpec(object):
         ValueError: `start` and `end` can't be negative
         ValueError: `start` can't be equal or greater than `end`
     """
-    def __init__(self, start, end, text=''):
+    def __init__(self, start, end, text='', track=1):
         super(AudioClipSpec, self).__init__()
         self._start = float(start)
         self._end = float(end)
         self._text = text
+        self._track = track
 
         if self._start < 0.0 or self._end < 0.0:
             raise ValueError("<start> or <end> can't be less than 0")
@@ -71,6 +72,15 @@ class AudioClipSpec(object):
     def text(self, value): 
         self._text = value
 
+    # Property: track
+    @property
+    def track(self): 
+        return self._track
+
+    @track.setter
+    def track(self, value): 
+        self._track = value
+
 class SpecsParser(object):
     """Audio clip specifications' parser"""
     _PROG = re.compile(r'''^\s*(?P<begin>\d*\.?\d+)\s+  # start timestamp
@@ -105,9 +115,11 @@ class SpecsParser(object):
         lines = [x.strip() for x in re.split(r'[\r\n]+', stringToParse)]
 
         clips = []
+        track = 1
         for line in lines:
             if line != '':
-                clips.append(cls._parseLine(line))
+                clips.append(cls._parseLine(line, track))
+                track = track + 1
 
             # if spec != None:
             #     clips.append(spec)
@@ -115,7 +127,7 @@ class SpecsParser(object):
         return clips
 
     @classmethod
-    def _parseLine(cls, line):
+    def _parseLine(cls, line, track=1):
         """Parsers a single line of text and returns an AudioClipSpec
 
         Line format:
@@ -133,4 +145,4 @@ class SpecsParser(object):
         if len(d['begin']) == 0 or len(d['end']) == 0:
             raise ValueError("Error: parsing '%s'. Correct: \"<number> <number> [<text>]\"" % line)
         
-        return AudioClipSpec(d['begin'], d['end'], d['text'].strip())
+        return AudioClipSpec(d['begin'], d['end'], d['text'].strip(), track)
