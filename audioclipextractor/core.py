@@ -18,10 +18,11 @@ class AudioClipExtractor(object):
         textMetadataName (str) - getter/setter
             The variable name used to embed text in the output clip
     """
-    def __init__(self, audioFilePath, ffmpegPath):
+    def __init__(self, audioFilePath, ffmpegPath="ffmpeg", bitrate="128k"):
         super(AudioClipExtractor, self).__init__()
         self._audioFilePath = audioFilePath
         self._ffmpegPath = ffmpegPath
+        self._bitrate = bitrate
         self._textMetadataName = 'm_text'
 
     @property
@@ -98,7 +99,7 @@ class AudioClipExtractor(object):
             '-c', 'copy',
             '-map', '0',
             '-acodec', 'libmp3lame',
-            '-ab', '128k',
+            '-ab', self._bitrate,
             '-f', 'mp3'
         ]
 
