@@ -34,7 +34,7 @@ class AudioClipExtractor(object):
     def textMetadataName(self, value):
         self._textMetadataName = value
 
-    def extractClips(self, specsFilePathOrStr, outputDir=None, zipOutput=False):
+    def extractClips(self, specsFilePathOrStr, outputDir=None, zipOutput=False, titleInFile=False):
         """Extract clips according to the specification file or string.
         
         Arguments:
@@ -65,7 +65,10 @@ class AudioClipExtractor(object):
 
         for i, clip in enumerate(clips):
             # 13 clips => clip01.mp3, clip12.mp3...
-            filenameFormat = 'clip%%0%dd.mp3' % len(str(len(clips)))
+            if titleInFile:
+                filenameFormat = '%%0%dd - ' % len(str(len(clips))) + '%s.mp3' % clip.text if clip.text != '' else 'clip'
+            else:
+                filenameFormat = 'clip%%0%dd.mp3' % len(str(len(clips)))
 
             filepath = os.path.join(outputDir, filenameFormat % (i+1))
 
