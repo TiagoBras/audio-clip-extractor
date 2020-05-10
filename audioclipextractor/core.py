@@ -18,11 +18,13 @@ class AudioClipExtractor(object):
         textMetadataName (str) - getter/setter
             The variable name used to embed text in the output clip
     """
-    def __init__(self, audioFilePath, ffmpegPath):
+    def __init__(self, audioFilePath, ffmpegPath="ffmpeg", bitrate="128k"):
         super(AudioClipExtractor, self).__init__()
         self._audioFilePath = audioFilePath
         self._ffmpegPath = ffmpegPath
-        self._textMetadataName = 'm_text'
+        self._bitrate = bitrate
+        self._textMetadataName = 'title'
+        self._textMetadataTrack = 'track'
 
     @property
     def textMetadataName(self):
@@ -32,7 +34,7 @@ class AudioClipExtractor(object):
     def textMetadataName(self, value):
         self._textMetadataName = value
 
-    def extractClips(self, specsFilePathOrStr, outputDir=None, zipOutput=False):
+    def extractClips(self, specsFilePathOrStr, outputDir=None, zipOutput=False, titleInFile=False):
         """Extract clips according to the specification file or string.
         
         Arguments:
@@ -63,7 +65,10 @@ class AudioClipExtractor(object):
 
         for i, clip in enumerate(clips):
             # 13 clips => clip01.mp3, clip12.mp3...
-            filenameFormat = 'clip%%0%dd.mp3' % len(str(len(clips)))
+            if titleInFile:
+                filenameFormat = '%%0%dd - ' % len(str(len(clips))) + '%s.mp3' % clip.text if clip.text != '' else 'clip'
+            else:
+                filenameFormat = 'clip%%0%dd.mp3' % len(str(len(clips)))
 
             filepath = os.path.join(outputDir, filenameFormat % (i+1))
 
@@ -98,12 +103,13 @@ class AudioClipExtractor(object):
             '-c', 'copy',
             '-map', '0',
             '-acodec', 'libmp3lame',
-            '-ab', '128k',
+            '-ab', self._bitrate,
             '-f', 'mp3'
         ]
 
         # Add clip TEXT as metadata and set a few more to default
-        metadata = { self._textMetadataName: audioClipSpec.text }
+        metadata = { self._textMetadataName: audioClipSpec.text, 
+        self._textMetadataTrack: audioClipSpec.track }
 
         for k, v in metadata.items():
             command.append('-metadata')
