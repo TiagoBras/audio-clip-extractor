@@ -3,15 +3,15 @@ Audio Clip Extractor
 
 This utility allows one to cut multiple clips from a single or multiple audio files.
 
-The idea of this project came up when I was doing some [Shadowing](https://en.wikipedia.org/wiki/Speech_shadowing), Japanese to be specific. The problem was that the dialogs were long, so if I wanted to practice a certain phrase or word I would have to manually rewind it. So I thought, if I can split them in different files I'll be able to practice each separately.
+The idea of this project came up when I was doing some [Shadowing](https://en.wikipedia.org/wiki/Speech_shadowing). The problem was that the dialogs were long, so if I wanted to practice a certain phrase or word I would have to manually rewind it. So I thought, if I can split them in different files I'd be able to practice each separately.
 
-Also, since this script can embed text as metadata in the outputted clips themselves the next step would be to create an application (I'm thinking mobile first) that takes all these clips and automatically arranges them in a way that makes shadowing even easier to practice.
+Also, since this script can embed text as metadata in the outputted clips themselves the next step would be to create an application that takes all these clips and automatically arranges them in a way that makes shadowing even easier to practice.
 
 
 Requirements
 ------------
 
-*FFMPEG* executable is mandatory to be able to run this. It can be downloaded for free
+This project depends on *FFMPEG*. It can be downloaded for free
  [here](https://ffmpeg.org/download.html).
 After installing it, you can either add it to your *PATH* or pass it as an argument `--ffmpeg <ffmpegPath>`.
 
@@ -34,7 +34,7 @@ How it works
 ------------
 
 ```
-$ audioclipextractor audio_to_cut_from.mp3
+$ ace audio_to_cut_from.mp3
 
 ```
 
@@ -102,7 +102,7 @@ $ pip install virtualenv
 $ virtualenv venv
 $ source venv/bin/activate
 $ pip install audioclipextractor
-(venv) $ python example.py
+(venv) $ ace audio_to_cut_from.mp3
 ```
 
 example.py
@@ -129,7 +129,6 @@ ext.extractClips(specs, '/path/to/output/directory', zipOutput=True)
 Notes
 -----
 
-This won't probably be called this
 This is still a work in progress. Feel free to use it, fork it and give suggestions.
 
 
