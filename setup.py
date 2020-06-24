@@ -20,6 +20,7 @@ setup(
     version=VERSION,
     description='Easily extract multiple clips from audio files',
     long_description=open(os.path.abspath('README.md')).read(),
+    long_description_content_type='text/markdown',
     license='MIT',
     author='Tiago Bras',
     author_email='tiagodsbras@gmail.com',
