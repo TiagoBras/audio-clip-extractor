@@ -2,15 +2,16 @@
 import sys
 import os
 import pytest
-
-import constants
+from tests import constants
 
 sys.path.insert(0, constants.ROOT_DIR)
 
 from audioclipextractor.parser import SpecsParser, AudioClipSpec
 
+
 def almostEqual(x, y):
     return abs(x - y) < 0.0001
+
 
 class TestAudioClipSpec(object):
     def test_initializer(self):
@@ -80,6 +81,7 @@ class TestAudioClipSpec(object):
         s = AudioClipSpec(12.436, 54.703)
         assert almostEqual(s.duration(), 42.267)
 
+
 class TestSpecsParser:
     def setup_class(self):
         self.LABELS_SAMPLE = """
@@ -95,40 +97,41 @@ class TestSpecsParser:
             AudioClipSpec(0.303745, 0.861787, "Hello"),
             AudioClipSpec(1.570524, 2.618325, "My name is Harry,"),
             AudioClipSpec(2.818466, 4.292451, "and I'm a software engineer."),
-            AudioClipSpec(4.731815, 9.730024, "I've been working on a big project for the last 5 years which I'll soon reveal to the world."),
+            AudioClipSpec(4.731815, 9.730024,
+                          "I've been working on a big project for the last 5 years which I'll soon reveal to the world."),
             AudioClipSpec(10.352719, 11.851183, "People will be amazed by it."),
             AudioClipSpec(12.277413, 16.010252, "I'd even dare to say that cats and dogs are going to love it as much.")
         ]
 
     def test_parse_line_with_valid_input(self):
-        s = SpecsParser._parseLine('1.0 7.5 You shall not pass!')
+        s = SpecsParser._parse_line('1.0 7.5 You shall not pass!')
         assert almostEqual(s.start, 1.0)
         assert almostEqual(s.end, 7.5)
         assert s.text == 'You shall not pass!'
 
         # With more whitespace and no text
-        s = SpecsParser._parseLine('   1.0   7.5 Go!    ')
+        s = SpecsParser._parse_line('   1.0   7.5 Go!    ')
         assert almostEqual(s.start, 1.0)
         assert almostEqual(s.end, 7.5)
         assert s.text == 'Go!'
 
         # With more whitespace and no text
-        s = SpecsParser._parseLine('   1.0   7.5')
+        s = SpecsParser._parse_line('   1.0   7.5')
         assert almostEqual(s.start, 1.0)
         assert almostEqual(s.end, 7.5)
         assert s.text == ''
 
     def test_parse_line_with_invalid_input(self):
         with pytest.raises(ValueError):
-            SpecsParser._parseLine('    7.5    ValueError!  23.7 ')
+            SpecsParser._parse_line('    7.5    ValueError!  23.7 ')
 
         with pytest.raises(ValueError):
-            SpecsParser._parseLine('  2.5 ')
+            SpecsParser._parse_line('  2.5 ')
 
     def test_read_labels_from_string(self):
         clips = SpecsParser.parse(self.LABELS_SAMPLE)
 
-        assert clips != None
+        assert clips is not None
         NUM_OF_CLIPS = 6
         assert len(clips) == NUM_OF_CLIPS
 
@@ -137,10 +140,10 @@ class TestSpecsParser:
             assert clips[i].text == self.EXPECTED_CLIPS[i].text
 
     def test_read_labels_from_file(self):
-        specsPath = os.path.join(constants.TESTS_DATA_DIR, 'synthesized_speech.txt')
-        clips = SpecsParser.parse(specsPath)
+        specs_path = os.path.join(constants.TESTS_DATA_DIR, 'synthesized_speech.txt')
+        clips = SpecsParser.parse(specs_path)
 
-        assert clips != None
+        assert clips is not None
         NUM_OF_CLIPS = 6
         assert len(clips) == NUM_OF_CLIPS
 
@@ -162,13 +165,13 @@ class TestSpecsParser:
         assert specs
         assert len(specs) == NUM_OF_CLIPS
 
-        expectedSpecs = [
+        expected_specs = [
             AudioClipSpec(start=0.5, end=20, text="Foo"),
             AudioClipSpec(start=34, end=50, text=""),
             AudioClipSpec(start=103.44, end=130, text=""),
             AudioClipSpec(start=150, end=173, text="Bar")
         ]
 
-        for spec, expectedSpec in zip(specs, expectedSpecs):
+        for spec, expectedSpec in zip(specs, expected_specs):
             assert abs(spec.duration() - expectedSpec.duration()) < 0.0001
             assert spec.text == expectedSpec.text

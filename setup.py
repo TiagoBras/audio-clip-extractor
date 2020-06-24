@@ -5,11 +5,13 @@ except ImportError:
 
 import os
 
+
 def version():
     with open(os.path.abspath('VERSION')) as f:
         return f.read().strip()
 
     raise IOError("Error: 'VERSION' file not found.")
+
 
 VERSION = version()
 

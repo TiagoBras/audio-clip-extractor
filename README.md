@@ -13,7 +13,7 @@ Requirements
 
 This project depends on *FFMPEG*. It can be downloaded for free
  [here](https://ffmpeg.org/download.html).
-After installing it, you can either add it to your *PATH* or pass it as an argument `--ffmpeg <ffmpegPath>`.
+After installing it, you can either add it to your *PATH* or pass it as an argument `--ffmpeg <ffmpeg_path>`.
 
 For each audio file there needs to be a file with the same name but with **.txt** extension with the respective clips' timestamps (check under section **How it works** for further information).
 
@@ -122,7 +122,7 @@ specs = '''
 '''
 
 # Extract the clips according to the specs and save them as a zip archive
-ext.extractClips(specs, '/path/to/output/directory', zipOutput=True)
+ext.extract_clips(specs, '/path/to/output/directory', zip_output=True)
 ```
 
 

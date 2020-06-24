@@ -2,6 +2,7 @@
 import os
 import re
 
+
 class AudioClipSpec(object):
     """Clip specification.
 
@@ -14,6 +15,7 @@ class AudioClipSpec(object):
         ValueError: `start` and `end` can't be negative
         ValueError: `start` can't be equal or greater than `end`
     """
+
     def __init__(self, start, end, text='', track=1):
         super(AudioClipSpec, self).__init__()
         self._start = float(start)
@@ -27,7 +29,6 @@ class AudioClipSpec(object):
         if self._start >= self._end:
             raise ValueError("<start> can't be equal or greater than <end>, %2f >= %2.f", self._start, self._end)
 
-
     def duration(self):
         """Returns the duration of the clip (`end` - `start`)"""
         return self.end - self.start
@@ -37,7 +38,7 @@ class AudioClipSpec(object):
 
     # Property: start
     @property
-    def start(self): 
+    def start(self):
         return self._start
 
     @start.setter
@@ -51,7 +52,7 @@ class AudioClipSpec(object):
 
     # Property: end
     @property
-    def end(self): 
+    def end(self):
         return self._end
 
     @end.setter
@@ -61,25 +62,26 @@ class AudioClipSpec(object):
 
         if value <= self._start:
             raise ValueError("<end> can't be less or equal than <start>, %2f <= %2.f", value, self._start)
-        self._end= value
+        self._end = value
 
     # Property: text
     @property
-    def text(self): 
+    def text(self):
         return self._text
 
     @text.setter
-    def text(self, value): 
+    def text(self, value):
         self._text = value
 
     # Property: track
     @property
-    def track(self): 
+    def track(self):
         return self._track
 
     @track.setter
-    def track(self, value): 
+    def track(self, value):
         self._track = value
+
 
 class SpecsParser(object):
     """Audio clip specifications' parser"""
@@ -89,11 +91,11 @@ class SpecsParser(object):
                         ''', re.X)
 
     @classmethod
-    def parse(cls, specsFileOrString):
+    def parse(cls, specs_file_or_string):
         """Parsers a file or string and returns a list of AudioClipSpec
         
         Arguments:
-            specsFileOrString (str): specifications' file or string
+            specs_file_or_string (str): specifications' file or string
         
         Examples:
             >>> SpecsParser.parse('23.4 34.1\n40.2 79.65 Hello World!')
@@ -102,23 +104,23 @@ class SpecsParser(object):
 
         Returns: list(AudioClipSpec) or None
         """
-        stringToParse = None
+        string_to_parse = None
 
-        # Read the contents of the file if specsFileOrString is not a string
-        if os.path.isfile(specsFileOrString):
-            with open(specsFileOrString, 'r') as f:
-                stringToParse = f.read()
+        # Read the contents of the file if specs_file_or_string is not a string
+        if os.path.isfile(specs_file_or_string):
+            with open(specs_file_or_string, 'r') as f:
+                string_to_parse = f.read()
         else:
-            stringToParse = specsFileOrString
+            string_to_parse = specs_file_or_string
 
         # Audacity uses \r for newlines
-        lines = [x.strip() for x in re.split(r'[\r\n]+', stringToParse)]
+        lines = [x.strip() for x in re.split(r'[\r\n]+', string_to_parse)]
 
         clips = []
         track = 1
         for line in lines:
             if line != '':
-                clips.append(cls._parseLine(line, track))
+                clips.append(cls._parse_line(line, track))
                 track = track + 1
 
             # if spec != None:
@@ -127,7 +129,7 @@ class SpecsParser(object):
         return clips
 
     @classmethod
-    def _parseLine(cls, line, track=1):
+    def _parse_line(cls, line, track=1):
         """Parsers a single line of text and returns an AudioClipSpec
 
         Line format:
@@ -144,5 +146,5 @@ class SpecsParser(object):
 
         if len(d['begin']) == 0 or len(d['end']) == 0:
             raise ValueError("Error: parsing '%s'. Correct: \"<number> <number> [<text>]\"" % line)
-        
+
         return AudioClipSpec(d['begin'], d['end'], d['text'].strip(), track)
