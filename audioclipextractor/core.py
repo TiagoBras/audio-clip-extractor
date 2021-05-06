@@ -107,9 +107,9 @@ class AudioClipExtractor(object):
             '-t', '%.3f' % audio_clip_spec.duration(),
             '-c', 'copy',
             '-map', '0',
-            '-acodec', 'libmp3lame',
+            '-acodec', 'pcm_s16le',
             '-ab', self._bitrate,
-            '-f', 'mp3'
+            '-f', 'wav'
         ]
 
         # Add clip TEXT as metadata and set a few more to default
