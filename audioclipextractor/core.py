@@ -68,12 +68,12 @@ class AudioClipExtractor(object):
             zip_file = zipfile.ZipFile(os.path.join(output_dir, zip_path), mode='w')
 
         for i, clip in enumerate(clips):
-            # 13 clips => clip01.mp3, clip12.mp3...
+            # 13 clips => clip01.wav, clip12.wav...
             if text_as_title:
                 filename_format = '%%0%dd - ' % len(
-                    str(len(clips))) + '%s.mp3' % clip.text if clip.text != '' else 'clip'
+                    str(len(clips))) + '%s.wav' % clip.text if clip.text != '' else 'clip'
             else:
-                filename_format = 'clip%%0%dd.mp3' % len(str(len(clips)))
+                filename_format = 'clip%%0%dd.wav' % len(str(len(clips)))
 
             filepath = os.path.join(output_dir, slugify_filename(filename_format % (i + 1)))
 
